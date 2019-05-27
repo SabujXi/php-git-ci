@@ -1,0 +1,20 @@
+{
+    "name": "sabujxi/php-git-ci",
+    "description": "Continuous CI/CD with PHP by md.sabuj.sarker@gmail.com (Md. Sabuj Sarker), SabujXi",
+    "authors": [
+        {
+            "name": "Md. Sabuj Sarker",
+            "email": "md.sabuj.sarker@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {"SabujXiCI\\": "code/"}
+    },
+    "require-dev": {
+        "symfony/dotenv": "^4.2",
+        "webmozart/path-util": "^2.3",
+        "symfony/filesystem": "^4.2",
+        "cpliakas/git-wrapper": "^2.2"
+    }
+}

@@ -1,0 +1,7 @@
+.idea/
+/vendor/
+
+.env
+
+__tmp__/
+__data__/
