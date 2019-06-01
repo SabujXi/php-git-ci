@@ -2,6 +2,10 @@
 /vendor/
 
 .env
+composer.lock
 
 __tmp__/
 __data__/
+cache/
+data/
+configs/

@@ -5,7 +5,7 @@
  * Date: 27-May-19
  * Time: 11:51 PM
  */
-namespace SabujXiCI;
+namespace CI;
 
 use Webmozart\PathUtil\Path;
 use Symfony\Component\Filesystem\Filesystem;

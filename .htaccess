@@ -1,0 +1,8 @@
+RewriteEngine On
+RewriteRule ^(public)($|/) - [L]
+
+# For all other files first check if they exist in 'public'
+RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f
+RewriteRule ^ public%{REQUEST_URI} [L]
+
+RewriteRule ^(.+)$ index.php [QSA,L,E=REQUEST_FILENAME:%{REQUEST_FILENAME},E=REQUEST_URI:%{REQUEST_URI},E=DOCUMENT_ROOT:%{DOCUMENT_ROOT},E=DOCUMENT_X:%{DOCUMENT_ROOT}public%{REQUEST_URI}]

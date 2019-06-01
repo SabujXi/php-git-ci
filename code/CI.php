@@ -6,7 +6,7 @@
  * Time: 11:52 PM
  */
 
-namespace SabujXiCI;
+namespace CI;
 
 use Symfony\Component\Dotenv\Dotenv;
 use Webmozart\PathUtil\Path;
