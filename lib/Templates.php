@@ -14,7 +14,7 @@ class Templates
         $this->app = $app;
         $this->twig = new \Twig\Environment(
             new \Twig\Loader\FilesystemLoader(VIEWS_DIR),
-            ['cache' => TEMPLATE_CACHE_DIR]
+            ['cache' => TEMPLATE_CACHE_DIR, 'auto_reload' => true]
         );
     }
 

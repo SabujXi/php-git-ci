@@ -11,24 +11,6 @@ namespace CI;
 use Symfony\Component\Dotenv\Dotenv;
 use Webmozart\PathUtil\Path;
 
-class Config{
-    private $env;
-    public function __construct($env) {
-        $this->env = $env;
-    }
-
-    public function get($key, $default=null){
-        if(isset($this->env[$key])){
-            return $this->env[$key];
-        }else{
-            return $default;
-        }
-    }
-
-    public function __get($name) {
-        return $this->get($name);
-    }
-}
 
 class CI{
     private $config = null;

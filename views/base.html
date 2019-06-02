@@ -1,19 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="{{ this.asset('/bootstrap-4.3.1-dist/css/bootstrap.css') }}">
+    </head>
 
-    <link href="{{ this.asset('/bootstrap-4.3.1-dist/css/bootstrap.css') }}">
-    <script src="{{ this.asset('/bootstrap-4.3.1-dist/js/bootstrap.js') }}"></script>
-    <script src="{{ this.asset('/jquery-3.4.1.min.js') }} "></script>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+            <a class="navbar-brand" href="#">Xi-PHP-CI</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="/configure">Configure</a>
+                    <a class="nav-item nav-link" href="/logs">Logs</a>
+                    <a class="nav-item nav-link" href="/reset-n-deploy">Reset & Deploy</a>
+                </div>
+            </div>
+            </div>
+        </nav>
 
+    <div class="container">
+        {% block body %}
 
-</head>
-<body>
-{% block body %}
+        {% endblock %}
 
-{% endblock %}
-
-</body>
+        <script src="{{ this.asset('/jquery-3.4.1.min.js') }} "></script>
+        <script src="{{ this.asset('/popper.min.js') }}"></script>
+        <script src="{{ this.asset('/bootstrap-4.3.1-dist/js/bootstrap.js') }}"></script>
+    </div>
+    </body>
 </html>
