@@ -33,8 +33,31 @@ class Application implements HttpKernelInterface{
             $attributes = $matcher->match($request->getPathInfo());
             $controller = $attributes['controller'];
             unset($attributes['controller']);
-            $ret = call_user_func_array($controller, $attributes);
-            $response =  $ret;
+            array_unshift($attributes, $request);
+            // determine type of controller and act accordingly.
+            // if it is a closure
+            if
+            (is_object($controller) && $controller instanceof \Closure){
+                $response = call_user_func_array($controller, $attributes);
+            }elseif(function_exists($controller)){
+                $response = call_user_func_array($controller, $attributes);
+            }else{
+                $class_name = null;
+                $method_name = null;
+                $_ = explode('@', $controller);
+                if(count($_) > 1){
+                    $class_name = $_[0];
+                    $method_name = $_[1];
+                }else{
+                    $class_name = $_[0];
+                    $method_name = 'index';
+                }
+                $class_name = '\Framework\\' . $class_name;
+                assert(is_subclass_of($class_name, '\Framework\BaseController'), 'Invalid controller');
+
+                $instance = new $class_name($this);
+                $response = call_user_func_array([$instance, $method_name], $attributes);
+            }
 
         }catch (ResourceNotFoundException $err){
             $response =  new Response("Not Found" . $request->getPathInfo(), 404);
