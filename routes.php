@@ -9,6 +9,4 @@ $app->route('/', function (){
 });
 
 
-$app->route('/a', function (){
-    return new Response("A Home Page", 200, ['Content-Type'=>'text/plain']);
-});
+$app->route('/Home', 'Home');

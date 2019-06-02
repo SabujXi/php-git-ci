@@ -52,7 +52,7 @@ class Application implements HttpKernelInterface{
                     $class_name = $_[0];
                     $method_name = 'index';
                 }
-                $class_name = '\Framework\\' . $class_name;
+                $class_name = '\Controller\\' . $class_name;
                 assert(is_subclass_of($class_name, '\Framework\BaseController'), 'Invalid controller');
 
                 $instance = new $class_name($this);
