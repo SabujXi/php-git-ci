@@ -1,6 +1,7 @@
 <?php
 namespace Framework;
 
+use CI\Config;
 use \Symfony\Component\HttpFoundation\Request;
 use \Symfony\Component\HttpFoundation\Response;
 use \Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -12,6 +13,7 @@ use \Symfony\Component\Routing\Generator\UrlGenerator;
 use \Symfony\Component\EventDispatcher\EventDispatcher;
 use \Symfony\Component\HttpKernel\HttpKernelInterface;
 use \Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 
 class Application implements HttpKernelInterface{
@@ -19,13 +21,43 @@ class Application implements HttpKernelInterface{
     private $routes;
     private $generator;
     private $dispatcher;
+    private $session;
+    private $auth;
+    private $configs = [];
 
     public function __construct(){
         $this->dispatcher = new EventDispatcher();
         $this->templates = new Templates($this);
         $this->routes  = new RouteCollection();
+        $this->session = new Session();
 
         $this->on('web_request', [$this, 'handle_web_request']);
+    }
+
+    public function start_session(){
+        if(!$this->session->isStarted()){
+            $this->session->start();
+        }
+        return $this->session;
+    }
+
+    public function get_config($config_name){
+        if(!array_key_exists($config_name, $this->configs)){
+            $config = new Config($config_name);
+            $this->configs[$config_name] = $config;
+        }
+
+        return $this->configs[$config_name];
+    }
+
+    public function get_auth(){
+        if(is_null($this->auth)){
+            $session = $this->start_session();
+            $name = $session->get('name', null);
+            $password = $session->get('password', null);
+            $this->auth = new Auth($this, $name, $password);
+        }
+        return $this->auth;
     }
 
     public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = true){
@@ -49,8 +81,19 @@ class Application implements HttpKernelInterface{
             array_unshift($attributes, $request);
             // determine type of controller and act accordingly.
             // if it is a closure
-            if
-            (is_object($controller) && $controller instanceof \Closure){
+
+            // auth
+            if($attributes['auth_needed']){
+                $auth = $this->get_auth();
+                if(!$auth->is_authentic()){
+//                    var_dump('not authentic');
+                    $this->redirect('login')->send();
+                    return ;
+                }
+            }
+
+
+            if(is_object($controller) && $controller instanceof \Closure){
                 $response = call_user_func_array($controller, $attributes);
             }elseif(function_exists($controller)){
                 $response = call_user_func_array($controller, $attributes);
@@ -90,7 +133,10 @@ class Application implements HttpKernelInterface{
         $this->dispatcher->dispatch($event_name, $event);
     }
 
-    public function route($path, $controller, $name=null, $methods=null, $auth_needed=false){
+    public function route($path, $controller, $params=[]){
+        $name=!isset($params['name']) ? null : $params['name'];
+        $methods=!isset($params['methods']) ? null : $params['methods'];
+        $auth_needed=!isset($params['auth_needed']) ? null : $params['auth_needed'];
         if(is_null($name)){
             $name = $path;
         }
@@ -105,6 +151,11 @@ class Application implements HttpKernelInterface{
 
     public function url($name, $args=[]){
         return $this->generator->generate($name, $args);
+    }
+
+    public function redirect($route_name, $args=[]){
+        $url = $this->url($route_name, $args);
+        return new Response('Redirecting...', Response::HTTP_TEMPORARY_REDIRECT, ['Location' => $url]);
     }
 
     public function run(){
