@@ -9,20 +9,33 @@ use \Symfony\Component\Routing\Route;
 use \Symfony\Component\Routing\RouteCollection;
 use \Symfony\Component\Routing\RequestContext;
 use \Symfony\Component\Routing\Generator\UrlGenerator;
+use \Symfony\Component\EventDispatcher\EventDispatcher;
 use \Symfony\Component\HttpKernel\HttpKernelInterface;
+use \Symfony\Component\EventDispatcher\Event;
+
 
 class Application implements HttpKernelInterface{
     public $templates;
     private $routes;
     private $generator;
+    private $dispatcher;
 
     public function __construct(){
+        $this->dispatcher = new EventDispatcher();
         $this->templates = new Templates($this);
         $this->routes  = new RouteCollection();
+
+        $this->on('web_request', [$this, 'handle_web_request']);
     }
 
-    public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = true)
+    public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = true){
+        $web_req_event = new WebRequestEvent($request);
+        $this->dispatch('web_request', $web_req_event);
+    }
+
+    public function handle_web_request(WebRequestEvent $web_req_event)
     {
+        $request = $web_req_event->get_request();
         $context = new RequestContext();
         $context->fromRequest($request);
         $this->generator = new UrlGenerator($this->routes, $context);
@@ -69,12 +82,20 @@ class Application implements HttpKernelInterface{
         return $response->send();
     }
 
+    public function on($event_name, $handler){
+        $this->dispatcher->addListener($event_name, $handler);
+    }
 
-    public function route($path, $controller, $name=null, $methods=null){
+    public function dispatch($event_name, Event $event=null){
+        $this->dispatcher->dispatch($event_name, $event);
+    }
+
+    public function route($path, $controller, $name=null, $methods=null, $auth_needed=false){
         if(is_null($name)){
             $name = $path;
         }
         $route = new Route($path, ['controller' => $controller]);
+        $route->setDefault('auth_needed', $auth_needed);
         $this->routes->add($name, $route);
     }
 
