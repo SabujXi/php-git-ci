@@ -7,7 +7,7 @@ if(!in_array('mod_rewrite', apache_get_modules())){
     exit("Mod Rewrite not enabled.");
 }
 // verify mod rewrite from the rewriterule E param
-if($_SERVER['REDIRECT_UNDER_REWRITE'] !== 'YES'){
+if($_SERVER['UNDER_REWRITE'] !== 'YES'){
     exit('Not confirmed that it is under rewrite.');
 }
 

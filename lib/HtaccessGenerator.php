@@ -41,7 +41,7 @@ RewriteRule ^($public_dir)($|/) - [L]
 RewriteCond %{DOCUMENT_ROOT}/$public_dir%{REQUEST_URI} -f
 RewriteRule ^ $public_dir%{REQUEST_URI} [L]
 
-RewriteRule ^(.+)$ index.php [QSA,L,E=UNDER_REWRITE=YES]
+RewriteRule ^(.+)$ index.php [QSA,L,E=UNDER_REWRITE:YES]
 
 # for debug purpose from php script, you may use this:
 # RewriteRule ^(.+)$ index.php [QSA,L,E=REQUEST_FILENAME:%{REQUEST_FILENAME},E=REQUEST_URI:%{REQUEST_URI},E=DOCUMENT_ROOT:%{DOCUMENT_ROOT},E=DOCUMENT_X:%{DOCUMENT_ROOT}public%{REQUEST_URI}]
