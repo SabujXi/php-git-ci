@@ -24,14 +24,40 @@ class Application implements HttpKernelInterface{
     private $session;
     private $auth;
     private $configs = [];
+    private $site_config = null;
 
-    public function __construct(){
+    public function __construct($site_config){
         $this->dispatcher = new EventDispatcher();
         $this->templates = new Templates($this);
         $this->routes  = new RouteCollection();
         $this->session = new Session();
 
         $this->on('web_request', [$this, 'handle_web_request']);
+
+        // site config
+        if(!isset($site_config['public_dirname'])){
+            $public_dirname = 'public';
+        }else{
+            $public_dirname = trim($site_config['public_dirname'], '\/');
+        }
+        if(!isset($site_config['subdir'])) {
+            $subdir = null;
+        }
+        else{
+            $subdir = $site_config['subdir'];
+        }
+        if($subdir){
+            $subdir = trim($subdir, '\/');
+            $public_dir = "$subdir/$public_dirname";
+        }else{
+            $public_dir = $public_dirname;
+        }
+
+        $site_config['public_dirname'] = $public_dirname;
+        $site_config['subdir'] = $subdir;
+        $site_config['public_dir'] = $public_dir;
+        $this->site_config = $site_config;
+
     }
 
     public function start_session(){
@@ -146,7 +172,8 @@ class Application implements HttpKernelInterface{
     }
 
     public function asset($path){
-        return $path;
+        $path = ltrim($path, '/');
+        return '/' . $this->site_config['public_dir'] . "/$path";
     }
 
     public function url($name, $args=[]){

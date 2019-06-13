@@ -1,11 +1,9 @@
 RewriteEngine On
-# If the URL starts with public/ or public$ then this is the last rule, apache will handle the rest.
-# TODO: I should add an exception to .php files.
-RewriteRule ^(public)($|/) - [L]
 
-# For all other files first check if they exist in 'public'
-RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f
-RewriteRule ^ public%{REQUEST_URI} [L]
+# exception to .php files in public dir
+RewriteRule ^(public/)(.+)\.php - [L,NC,R=403]
+# If the URL starts with public/ or public$ then this is the last rule, apache will handle the rest.
+RewriteRule ^(public/) - [L]
 
 RewriteRule ^(.+)$ index.php [QSA,L,E=UNDER_REWRITE:YES]
 

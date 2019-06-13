@@ -1,5 +1,5 @@
 <?php
-
+//
 // check if mod rewrite enabled. At this moment I am assuming that this app will be hosted under apache.
 // TODO: in future there will be testing for nginx, etc.
 if(!in_array('mod_rewrite', apache_get_modules())){
@@ -34,7 +34,8 @@ foreach ($dirs as $dir){
 
 
 use Framework\Application;
-$app = new Application();
+$site_config = require_once 'site_config.php';
+$app = new Application($site_config);
 $GLOBALS['app'] = $app;
 
 require_once 'routes.php';
