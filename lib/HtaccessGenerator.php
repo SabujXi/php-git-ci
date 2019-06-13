@@ -10,29 +10,36 @@ namespace Framework;
 
 
 class HtaccessGenerator {
-    public function write($path=null, $subdir=null){
+    public function write($path=null, $subdir=null, $public_dirname=null){
         if(!$path){
             $path = ROOT_PATH . '/.htaccess';
         }
-        file_put_contents($path, self::render('public', $subdir));
+        file_put_contents($path, self::render($subdir, $public_dirname));
     }
 
-    public function render($public_dirname, $subdir){
-        $public_dirname = trim($public_dirname, '\/');
-        $subdir = trim($subdir, '\/');
-        if($subdir){
-            $public_dirname = "$subdir/$public_dirname";
+    public function render($subdir, $public_dirname){
+        if(!$public_dirname){
+            $public_dirname = 'public';
         }
+        $public_dirname = trim($public_dirname, '\/');
+        if($subdir){
+            $subdir = trim($subdir, '\/');
+            $public_dir = "$subdir/$public_dirname";
+        }else{
+            $public_dir = $public_dirname;
+        }
+        // echo "Public: $public_dirname" . PHP_EOL;
+        // echo "Subdir: $subdir";
         $template =
 <<<MULTILINE
 RewriteEngine On
 # If the URL starts with public/ or public$ then this is the last rule, apache will handle the rest.
 # TODO: I should add an exception to .php files.
-RewriteRule ^($public_dirname)($|/) - [L]
+RewriteRule ^($public_dir)($|/) - [L]
 
 # For all other files first check if they exist in 'public'
-RewriteCond %{DOCUMENT_ROOT}/$public_dirname%{REQUEST_URI} -f
-RewriteRule ^ $public_dirname%{REQUEST_URI} [L]
+RewriteCond %{DOCUMENT_ROOT}/$public_dir%{REQUEST_URI} -f
+RewriteRule ^ $public_dir%{REQUEST_URI} [L]
 
 RewriteRule ^(.+)$ index.php [QSA,L,E=UNDER_REWRITE=YES]
 

@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'under_subdir' => 'php-git-ci'
+    'subdir' => 'php-git-ci',
+    'public_dirname' => 'public'
 ];

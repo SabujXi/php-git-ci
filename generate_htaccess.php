@@ -13,9 +13,9 @@ require 'vendor/autoload.php';
 // determine subdir, first from env
 
 $subdir = getenv('UNDER_SUBDIR');
-if($subdir){
+if(!$subdir){
     $config = require 'site_config.php';
-    $subdir = $config['under_subdir'];
+    $subdir = $config['subdir'];
 }
 
 if(!$subdir){
