@@ -1,5 +1,15 @@
 <?php
 
+// check if mod rewrite enabled. At this moment I am assuming that this app will be hosted under apache.
+// TODO: in future there will be testing for nginx, etc.
+if(!in_array('mod_rewrite', apache_get_modules())){
+    // TODO: make it more verbose - add pretty html error page.
+    exit("Mod Rewrite not enabled.");
+}
+// verify mod rewrite from the rewriterule E param
+if($_SERVER['REDIRECT_UNDER_REWRITE'] !== 'YES'){
+    exit('Not confirmed that it is under rewrite.');
+}
 
 define('ROOT_PATH', dirname(realpath(__FILE__)));
 
