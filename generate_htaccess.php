@@ -10,8 +10,20 @@ define('ROOT_PATH', realpath(__DIR__));
 
 require 'vendor/autoload.php';
 
+// determine subdir, first from env
+
+$subdir = getenv('UNDER_SUBDIR');
+if($subdir){
+    $config = require 'site_config.php';
+    $subdir = $config['under_subdir'];
+}
+
+if(!$subdir){
+    $subdir = null;
+}
+
 use Framework\HtaccessGenerator;
 
 $generator = new HtaccessGenerator();
 
-$generator->write(null);
+$generator->write(null, $subdir);

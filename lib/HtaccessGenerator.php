@@ -10,11 +10,11 @@ namespace Framework;
 
 
 class HtaccessGenerator {
-    public function write($path){
+    public function write($path=null, $subdir=null){
         if(!$path){
             $path = ROOT_PATH . '/.htaccess';
         }
-        file_put_contents($path, self::render('public', null));
+        file_put_contents($path, self::render('public', $subdir));
     }
 
     public function render($public_dirname, $subdir){
