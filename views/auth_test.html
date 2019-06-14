@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div>
+    <p>
+        {% if auth.is_authentic() %}
+        Authentic.<br>
+        Username: {{ auth.name() }}
+        {% else %}
+        Not authentic
+        {% endif %}
+    </p>
+
+</div>
+{% endblock %}

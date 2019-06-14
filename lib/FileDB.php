@@ -31,7 +31,7 @@ class FileDB {
         $path = $this->make_entity_path($name);
         $exists = file_exists($path);
         if(!$exists){
-            touch($path);
+            file_put_contents($path, json_encode([]));
         }else{
             if($return_if_exists){
                 throw new \Exception("Entity $name already exists");

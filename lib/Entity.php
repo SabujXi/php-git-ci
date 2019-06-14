@@ -38,9 +38,9 @@ class Entity
     public function set($key, $value){
         $_keys = explode('.', $key);
         $key = array_pop($_keys);
-        $arr = $this->entity;
+        $arr = &$this->entity;
         foreach ($_keys as $_key){
-            $arr = $arr[$_key];
+            $arr = &$arr[$_key];
         }
 
         $arr[$key] = $value;

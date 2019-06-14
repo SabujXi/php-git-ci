@@ -76,10 +76,19 @@ class Application implements HttpKernelInterface{
 
     public function get_auth(){
         if(is_null($this->auth)){
-            $session = $this->start_session();
-            $name = $session->get('name', null);
-            $password = $session->get('password', null);
-            $this->auth = new Auth($this, $name, $password);
+            if(!$this->file_db->entity_exists('auths')){
+                $this->auth = new Auth($this, null, null);
+            }else{
+                $session = $this->start_session();
+                $username = $session->get('username', null);
+                $password = $session->get('password', null);
+                $auths_entity = $this->file_db->get_entity('auths');
+                if($auths_entity->get('username') === $username && $auths_entity->get('password') === $password && !in_array(null, [$username, $password])){
+                    $this->auth = new Auth($this, $username, $password);
+                }else{
+                    $this->auth = new Auth($this, null, null);
+                }
+            }
         }
         return $this->auth;
     }
@@ -180,7 +189,7 @@ class Application implements HttpKernelInterface{
 
     public function redirect($route_name, $args=[]){
         $url = $this->url($route_name, $args);
-        return new Response('Redirecting...', Response::HTTP_TEMPORARY_REDIRECT, ['Location' => $url]);
+        return new Response('Redirecting...', 303, ['Location' => $url]);
     }
 
     public function run(){
