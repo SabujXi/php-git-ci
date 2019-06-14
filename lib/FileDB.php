@@ -34,6 +34,7 @@ class FileDB {
             file_put_contents($path, json_encode([]));
         }else{
             if($return_if_exists){
+            }else{
                 throw new \Exception("Entity $name already exists");
             }
         }

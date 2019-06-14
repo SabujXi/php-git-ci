@@ -8,6 +8,7 @@ $app->route('/login', 'Login', ['name' => 'login']);
 $app->route('/logout', 'Login@logout', ['name' => 'logout']);
 $app->route('/auth_test', 'Login@auth_test', ['name' => 'auth_test']);
 $app->route('/auth_setup', 'AuthSetup', ['name' => 'auth_setup']);
+$app->route('/deploy_settings', 'DeploySettings', ['name' => 'deploy_settings']);
 
 
 
