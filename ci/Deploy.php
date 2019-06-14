@@ -7,19 +7,32 @@
  */
 namespace CI;
 
+use Framework\Entity;
 use Webmozart\PathUtil\Path;
 use Symfony\Component\Filesystem\Filesystem;
 use GitWrapper\GitWrapper;
 
 class Deploy{
-    private $ci;
-    public function __construct(CI $ci) {
-        $this->ci = $ci;
+    private $deploy_entity;
+
+    public function __construct(Entity $deploy_entity) {
+        $this->deploy_entity = $deploy_entity;
+    }
+
+    public function get_deploy_dir(){
+        $deploy_dir = $this->deploy_entity->get('deploy_dir');
+        $deploy_path = $deploy_dir;
+
+        if(Path::isRelative($deploy_dir)){
+            $deploy_path = Path::join(ROOT_PATH, $deploy_dir);
+        }
+        return $deploy_path;
     }
 
     public function run(){
-        $config = $this->ci->get_config();
-        $deploy_dir = $this->ci->get_deploy_dir();
+        $config = $this->deploy_entity;
+        $deploy_dir = $this->get_deploy_dir();
+
         $data_dir = Path::join(ROOT_PATH, '__data__');
 
         // cleanup deploy dir -- skipping this step as the storage might be there TODO: but find a good solution including igonre pattern.
