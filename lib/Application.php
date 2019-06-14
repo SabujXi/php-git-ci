@@ -23,7 +23,7 @@ class Application implements HttpKernelInterface{
     private $dispatcher;
     private $session;
     private $auth;
-    private $configs = [];
+    private $file_db;
     private $site_config = null;
 
     public function __construct($site_config){
@@ -58,6 +58,9 @@ class Application implements HttpKernelInterface{
         $site_config['public_dir'] = $public_dir;
         $this->site_config = $site_config;
 
+        // file db
+        $this->file_db = new FileDB(CONFIGS_DIR);
+
     }
 
     public function start_session(){
@@ -67,13 +70,8 @@ class Application implements HttpKernelInterface{
         return $this->session;
     }
 
-    public function get_config($config_name){
-        if(!array_key_exists($config_name, $this->configs)){
-            $config = new Config($config_name);
-            $this->configs[$config_name] = $config;
-        }
-
-        return $this->configs[$config_name];
+    public function file_db(){
+        return $this->file_db;
     }
 
     public function get_auth(){
