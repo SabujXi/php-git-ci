@@ -18,10 +18,11 @@ require_once 'vendor/autoload.php';
 
 use Webmozart\PathUtil\Path;
 
-define('CACHE_DIR', Path::join(ROOT_PATH, 'cache'));
-define('TEMPLATE_CACHE_DIR', Path::join(ROOT_PATH, 'cache', 'templates'));
-define('DATA_DIR', Path::join(ROOT_PATH, 'data'));
-define('CONFIGS_DIR', Path::join(ROOT_PATH, 'configs'));
+define('CACHE_DIR', Path::join(ROOT_PATH, '__cache__'));
+define('TEMPLATE_CACHE_DIR', Path::join(ROOT_PATH, '__cache__', 'templates'));
+define('DATA_DIR', Path::join(ROOT_PATH, '__data__'));
+define('CONFIGS_DIR', Path::join(ROOT_PATH, '__configs__'));
+define('TMP_DIR', Path::join(ROOT_PATH, '__tmp__'));
 define('VIEWS_DIR', Path::join(ROOT_PATH, 'views'));
 define('PUBLIC_DIE', Path::join(ROOT_PATH, 'public'));
 // create required directories

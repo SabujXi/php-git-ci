@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+{% if messages %}
+<div>
+    {% for message in messages %}
+        {{ message }} <br>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div>
+    {{ success_message }}
+</div>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="file">File</label>
+        <input name="file" type="file" class="form-control" id="file" placeholder="Data File">
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+
+<div>
+    Existing Files:<br>
+    <ol>
+    {% for file_name in file_names %}
+        <li>{{ file_name }}</li>
+    {% endfor %}
+    </ol>
+</div>
+{% endblock %}

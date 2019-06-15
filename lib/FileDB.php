@@ -80,10 +80,12 @@ class FileDB {
     function list_entities(){
         $path = rtrim($this->db_dir, '\/');
         $file_names = glob($path . '/*.json');
+        // TODO: only get the last component as glob provides the full path.
         $entity_names = [];
         foreach ($file_names as $file_name){
             $entity_names[] = substr($file_name, 0, strlen($file_name) - strlen('.json'));
         }
+        throw new \Exception('Not implemented');
         return $entity_names;
     }
 }

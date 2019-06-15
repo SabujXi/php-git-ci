@@ -9,8 +9,9 @@ $app->route('/logout', 'Login@logout', ['name' => 'logout']);
 $app->route('/auth_test', 'Login@auth_test', ['name' => 'auth_test']);
 $app->route('/auth_setup', 'AuthSetup', ['name' => 'auth_setup']);
 $app->route('/deploy_settings', 'DeploySettings', ['name' => 'deploy_settings']);
-$app->route('/deploy', 'Deploy', ['name' => 'deploy']);
-$app->route('/reset_n_deploy', 'Deploy', ['name' => 'reset_n_deploy']);
+$app->route('/deploy', 'Deploy@deploy', ['name' => 'deploy']);
+$app->route('/reset_n_deploy', 'Deploy@reset_n_deploy', ['name' => 'reset_n_deploy']);
+$app->route('/upload_data', 'DataManager@upload', ['name' => 'upload_data']);
 
 
 /* closure example

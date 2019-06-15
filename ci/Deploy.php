@@ -29,36 +29,37 @@ class Deploy{
         return $deploy_path;
     }
 
-    public function run(){
-        $deploy_entity = $this->deploy_entity;
+    public function run($reset_tmp=false){
+        $filesystem = new Filesystem();
         $deploy_dir = $this->get_deploy_dir();
+        if($reset_tmp){
+            $filesystem->remove(TMP_DIR);
+        }
 
-        $data_dir = Path::join(ROOT_PATH, '__data__');
+        $deploy_entity = $this->deploy_entity;
 
         // cleanup deploy dir -- skipping this step as the storage might be there TODO: but find a good solution including igonre pattern.
 
         // make/cleanup a temporary dir.
         $git_wrapper = new GitWrapper();
-        $tmp_dir = Path::join(ROOT_PATH, '__tmp__');
-        $filesystem = new Filesystem();
 
-        if($filesystem->exists($tmp_dir)){
+        if($filesystem->exists(TMP_DIR)){
             // $filesystem->remove($tmp_dir); -- no, pull.
-            if($filesystem->exists($tmp_dir . '/.git')){
-                $git = $git_wrapper->workingCopy($tmp_dir);
+            if($filesystem->exists(TMP_DIR . '/.git')){
+                $git = $git_wrapper->workingCopy(TMP_DIR);
                 $git->pull();
             }else{
-                $git = $git_wrapper->workingCopy($tmp_dir);
-                $git->cloneRepository($deploy_entity->get('git_repository_url', $tmp_dir));
+                $git = $git_wrapper->workingCopy(TMP_DIR);
+                $git->cloneRepository($deploy_entity->get('git_repository_url', TMP_DIR));
             }
         }else{
-            $filesystem->mkdir($tmp_dir);
+            $filesystem->mkdir(TMP_DIR);
             // clone/checkout git
-            $git = $git_wrapper->workingCopy($tmp_dir);
-            $git->cloneRepository($deploy_entity->get('git_repository_url', $tmp_dir));
+            $git = $git_wrapper->workingCopy(TMP_DIR);
+            $git->cloneRepository($deploy_entity->get('git_repository_url', TMP_DIR));
         }
-        $filesystem->mirror($tmp_dir, $deploy_dir);
-        $filesystem->mirror($data_dir, $deploy_dir);
+        $filesystem->mirror(TMP_DIR, $deploy_dir);
+        $filesystem->mirror(DATA_DIR, $deploy_dir);
         $filesystem->remove(Path::join($deploy_dir, '.git'));
     }
 }

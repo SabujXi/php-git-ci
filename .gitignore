@@ -6,7 +6,7 @@ composer.lock
 
 __tmp__/
 __data__/
-cache/
-data/
-configs/
+__cache__/
+__data__/
+__configs__/
 .htaccess
