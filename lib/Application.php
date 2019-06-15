@@ -23,41 +23,14 @@ class Application implements HttpKernelInterface{
     private $session;
     private $auth;
     private $file_db;
-    private $site_config = null;
 
-    public function __construct($site_config){
+    public function __construct(){
         $this->dispatcher = new EventDispatcher();
         $this->templates = new Templates($this);
         $this->routes  = new RouteCollection();
         $this->session = new Session();
 
         $this->on('web_request', [$this, 'handle_web_request']);
-
-        // site config
-        if(!isset($site_config['public_dirname'])){
-            $public_dirname = 'public';
-        }else{
-            $public_dirname = trim($site_config['public_dirname'], '\/');
-        }
-        if(!isset($site_config['subdir'])) {
-            $subdir = '';
-        }
-        else{
-            $subdir = $site_config['subdir'];
-        }
-        if($subdir){
-            $subdir = trim($subdir, '\/');
-            $public_dir = "$subdir/$public_dirname";
-        }else{
-            $public_dir = $public_dirname;
-        }
-
-        $site_config['public_dirname'] = $public_dirname;
-        $site_config['subdir'] = $subdir;
-        assert(SITE_SUBDIR === $subdir, "Site subdir in site config and from calculation is not the same");
-        $site_config['public_dir'] = $public_dir;
-        $this->site_config = $site_config;
-
         // file db
         $this->file_db = new FileDB(CONFIGS_DIR);
 
@@ -180,7 +153,7 @@ class Application implements HttpKernelInterface{
 
     public function asset($path){
         $path = ltrim($path, '/');
-        return URL_BASE . $this->site_config['public_dirname'] . "/" . $path;
+        return URL_BASE . 'public' . "/" . $path;
     }
 
     public function url($name, $args=[]){

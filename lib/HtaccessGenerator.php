@@ -14,7 +14,9 @@ class HtaccessGenerator {
         if(!$path){
             $path = ROOT_PATH . '/.htaccess';
         }
+        $text = self::render($subdir, $public_dirname);
         file_put_contents($path, self::render($subdir, $public_dirname));
+        return $text;
     }
 
     public function render($subdir, $public_dirname){

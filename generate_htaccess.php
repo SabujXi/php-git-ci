@@ -6,17 +6,12 @@
  * Time: 4:32 PM
  */
 
-define('ROOT_PATH', realpath(__DIR__));
+require_once 'vendor/autoload.php';
 
-require 'vendor/autoload.php';
-
+require_once '_bootstrap.php';
 // determine subdir, first from env
 
-$subdir = getenv('UNDER_SUBDIR');
-if(!$subdir){
-    $config = require 'site_config.php';
-    $subdir = $config['subdir'];
-}
+$subdir = SITE_SUBDIR;
 
 if(!$subdir){
     $subdir = null;
@@ -26,4 +21,8 @@ use Framework\HtaccessGenerator;
 
 $generator = new HtaccessGenerator();
 
-$generator->write(null, $subdir);
+$htaccess_text = $generator->write(null, $subdir);
+echo "Htaccess generated... and you will not be able to see this message if you refresh browser - you will get a 404 instead - if you can see then there is an error.";
+echo "<pre>\n\n" . $htaccess_text . "<pre>\n\n";
+
+
