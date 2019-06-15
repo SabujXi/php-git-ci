@@ -24,6 +24,11 @@
                     <a class="nav-item nav-link" href="{{ this.url('upload_data') }}">Upload Data</a>
                     <a class="nav-item nav-link" href="{{ this.url('execute_command') }}">Execute Command</a>
                     <a class="nav-item nav-link" href="#">Logs</a>
+                    {% if this.get_auth().is_authentic() %}
+                        <a class="nav-item nav-link" href="{{ this.url('logout') }}">{{ this.get_auth().name() }} | Logout</a>
+                    {% else %}
+                        <a class="nav-item nav-link" href="{{ this.url('login') }}">Login</a>
+                    {% endif %}
                 </div>
             </div>
             </div>
