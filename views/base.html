@@ -11,16 +11,17 @@
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
-            <a class="navbar-brand" href="#">Xi-PHP-CI</a>
+            <a class="navbar-brand" href="{{ this.url('home') }}">Xi-PHP-CI</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
-                    <a class="nav-item nav-link" href="/configure">Configure</a>
-                    <a class="nav-item nav-link" href="/logs">Logs</a>
-                    <a class="nav-item nav-link" href="/reset-n-deploy">Reset & Deploy</a>
+                    <a class="nav-item nav-link active" href="{{ this.url('home') }}">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="{{ this.url('deploy_settings') }}">Settings</a>
+                    <a class="nav-item nav-link" href="{{ this.url('deploy') }}">Deploy</a>
+                    <a class="nav-item nav-link" href="{{ this.url('reset_n_deploy') }}">Reset & Deploy</a>
+                    <a class="nav-item nav-link" href="#">Logs</a>
                 </div>
             </div>
             </div>

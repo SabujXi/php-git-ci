@@ -1,7 +1,6 @@
 <?php
 namespace Framework;
 
-use CI\Config;
 use \Symfony\Component\HttpFoundation\Request;
 use \Symfony\Component\HttpFoundation\Response;
 use \Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -41,7 +40,7 @@ class Application implements HttpKernelInterface{
             $public_dirname = trim($site_config['public_dirname'], '\/');
         }
         if(!isset($site_config['subdir'])) {
-            $subdir = null;
+            $subdir = '';
         }
         else{
             $subdir = $site_config['subdir'];
@@ -55,6 +54,7 @@ class Application implements HttpKernelInterface{
 
         $site_config['public_dirname'] = $public_dirname;
         $site_config['subdir'] = $subdir;
+        assert(SITE_SUBDIR === $subdir, "Site subdir in site config and from calculation is not the same");
         $site_config['public_dir'] = $public_dir;
         $this->site_config = $site_config;
 
@@ -180,7 +180,7 @@ class Application implements HttpKernelInterface{
 
     public function asset($path){
         $path = ltrim($path, '/');
-        return '/' . $this->site_config['public_dir'] . "/$path";
+        return URL_BASE . $this->site_config['public_dirname'] . "/" . $path;
     }
 
     public function url($name, $args=[]){

@@ -32,6 +32,20 @@ foreach ($dirs as $dir){
     }
 }
 
+// Base URL calculation
+$_document_root = Path::canonicalize($_SERVER['DOCUMENT_ROOT']);
+$_current_dir = Path::canonicalize(realpath(__DIR__));
+$_document_root_components = explode('/', $_document_root);
+$_current_dir_components = explode('/', $_current_dir);
+$_url_base_components = array_slice($_current_dir_components, count($_document_root_components));
+
+define('SITE_SUBDIR', implode('/', $_url_base_components));
+
+if(count($_url_base_components) !== 0){
+    define('URL_BASE', '/' . implode('/', $_url_base_components) . '/');
+}else{
+    define('URL_BASE', '/');
+}
 
 use Framework\Application;
 $site_config = require_once 'site_config.php';
