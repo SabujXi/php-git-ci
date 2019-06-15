@@ -31,8 +31,9 @@ class ExecuteCommand extends BaseController
             }
             $prev_dir = getcwd();
             chdir($dir);
-            exec($command, $command_outputs, $return_val);
+            exec($command . ' 2>&1', $command_outputs, $return_val);
             $command_outputs = implode("\n", $command_outputs);
+            $session->getFlashBag()->add('command', $command);
             $session->getFlashBag()->add('command_outputs', $command_outputs);
             $session->getFlashBag()->add('exit_code', $return_val);
             chdir($prev_dir);
