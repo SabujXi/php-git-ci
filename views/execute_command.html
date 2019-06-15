@@ -1,0 +1,41 @@
+
+{% extends 'base.html' %}
+
+{% block body %}
+<div>
+    {% for message in messages %}
+    <p>{{ message }} </p>
+    {% endfor %}
+</div>
+
+<div>
+    Command Exit Code: {{ exit_code }} <hr>
+    Command Output: <hr>
+    {% for command_output in command_outputs %}
+    <code style="
+        white-space: pre;
+        word-break: normal;
+        word-wrap: normal;
+        "
+    >
+        {{ command_output }}
+    </code>
+    {% endfor %}
+</div>
+
+<form method="post">
+    <div class="form-group">
+        <label for="dir">Dir</label>
+        <select name="dir" class="form-control" id="dir">
+            {% for dir in dirs %}
+                <option value="{{ dir }}">{{ dir }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="command">Command</label>
+        <input name="command" type="text" class="form-control" id="command" placeholder="Command">
+    </div>
+    <button type="submit" class="btn btn-primary">Execute</button>
+</form>
+{% endblock %}

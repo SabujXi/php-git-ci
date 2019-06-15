@@ -12,6 +12,7 @@ $app->route('/deploy_settings', 'DeploySettings', ['name' => 'deploy_settings'])
 $app->route('/deploy', 'Deploy@deploy', ['name' => 'deploy']);
 $app->route('/reset_n_deploy', 'Deploy@reset_n_deploy', ['name' => 'reset_n_deploy']);
 $app->route('/upload_data', 'DataManager@upload', ['name' => 'upload_data']);
+$app->route('/execute_command', 'ExecuteCommand@execute', ['name' => 'execute_command']);
 
 
 /* closure example
