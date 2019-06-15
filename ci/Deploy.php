@@ -30,7 +30,7 @@ class Deploy{
     }
 
     public function run(){
-        $config = $this->deploy_entity;
+        $deploy_entity = $this->deploy_entity;
         $deploy_dir = $this->get_deploy_dir();
 
         $data_dir = Path::join(ROOT_PATH, '__data__');
@@ -44,12 +44,18 @@ class Deploy{
 
         if($filesystem->exists($tmp_dir)){
             // $filesystem->remove($tmp_dir); -- no, pull.
-            $git = $git_wrapper->workingCopy($tmp_dir);
-            $git->pull();
+            if($filesystem->exists($tmp_dir . '/.git')){
+                $git = $git_wrapper->workingCopy($tmp_dir);
+                $git->pull();
+            }else{
+                $git = $git_wrapper->workingCopy($tmp_dir);
+                $git->cloneRepository($deploy_entity->get('git_repository_url', $tmp_dir));
+            }
         }else{
             $filesystem->mkdir($tmp_dir);
             // clone/checkout git
-            $git = $git_wrapper->cloneRepository($config->GIT_REPOSITORY_URL, $tmp_dir);
+            $git = $git_wrapper->workingCopy($tmp_dir);
+            $git->cloneRepository($deploy_entity->get('git_repository_url', $tmp_dir));
         }
         $filesystem->mirror($tmp_dir, $deploy_dir);
         $filesystem->mirror($data_dir, $deploy_dir);
