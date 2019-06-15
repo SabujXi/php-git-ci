@@ -14,4 +14,38 @@
     {{ success_message }}
 </div>
 
+<div>
+    <h1>Pre Command Outputs:</h1> <hr>
+    {% for command_output in pre_command_outputs %}
+    <b>Command:</b> <code>{{ command_output.command }}</code> <br>
+    <b>Exit Code:</b> <code>{{ command_output.exit_code }}</code><br>
+    <code style="
+        white-space: pre;
+        word-break: normal;
+        word-wrap: normal;
+        "
+    >
+        {{ command_output.output }}
+    </code>
+    <hr>
+    {% endfor %}
+</div>
+
+<div>
+    <h1>Post Command Outputs:</h1> <hr>
+    {% for command_output in post_command_outputs %}
+    <b>Command:</b> <code>{{ command_output.command }}</code> <br>
+    <b>Exit Code:</b> <code>{{ command_output.exit_code }}</code><br>
+    <code style="
+        white-space: pre;
+        word-break: normal;
+        word-wrap: normal;
+        "
+    >
+        {{ command_output.output }}
+    </code>
+    <hr>
+    {% endfor %}
+</div>
+
 {% endblock %}

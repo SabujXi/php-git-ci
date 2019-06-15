@@ -29,14 +29,48 @@ class Deploy{
         return $deploy_path;
     }
 
+    private function run_commands($commands_text, $deploy_dir){
+        $prev_dir = getcwd();
+        chdir($deploy_dir);
+        $commands = $commands_text;
+        $commands_array = [];
+        $command_outputs = [];
+        if($commands){
+            foreach (preg_split ('/\n|\r\n/', $commands) as $line){
+                $line = trim($line);
+                if($line){
+                    $commands_array[] = $line;
+                }
+            }
+
+            foreach ($commands_array as $command){
+                exec($command, $output, $ret_value);
+                $output = implode("\n", $output);
+                $obj = new \stdClass();
+                $obj->exit_code = $ret_value;
+                $obj->output = $output;
+                $obj->command = $command;
+                $command_outputs[] = $obj;
+            }
+        }
+        chdir($prev_dir);
+        return $command_outputs;
+    }
+
     public function run($reset_tmp=false){
         $filesystem = new Filesystem();
         $deploy_dir = $this->get_deploy_dir();
+        $deploy_entity = $this->deploy_entity;
+
+        // pre commands
+        $commands = $deploy_entity->get('pre_commands');
+        $pre_command_outputs = $this->run_commands($commands, $deploy_dir);
+        // < pre commands
+
         if($reset_tmp){
             $filesystem->remove(TMP_DIR);
         }
 
-        $deploy_entity = $this->deploy_entity;
 
         // cleanup deploy dir -- skipping this step as the storage might be there TODO: but find a good solution including igonre pattern.
 
@@ -61,5 +95,12 @@ class Deploy{
         $filesystem->mirror(TMP_DIR, $deploy_dir);
         $filesystem->mirror(DATA_DIR, $deploy_dir);
         $filesystem->remove(Path::join($deploy_dir, '.git'));
+
+        // post commands
+        $commands = $deploy_entity->get('post_commands');
+        $post_command_outputs = $this->run_commands($commands, $deploy_dir);
+        // < post commands
+
+        return [$pre_command_outputs, $post_command_outputs];
     }
 }
