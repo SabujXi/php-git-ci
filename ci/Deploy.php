@@ -44,7 +44,7 @@ class Deploy{
             }
 
             foreach ($commands_array as $command){
-                exec($command, $output, $ret_value);
+                exec($command . ' 2>&1', $output, $ret_value);
                 $output = implode("\n", $output);
                 $obj = new \stdClass();
                 $obj->exit_code = $ret_value;
