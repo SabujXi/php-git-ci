@@ -10,8 +10,8 @@ class DeploySettings extends BaseController
 {
     public function index(Request $request){
         $session = $this->app->start_session();
+        $file_db = $this->app->file_db();
         if($request->getMethod() === 'POST'){
-            $file_db = $this->app->file_db();
             $deploy_entity = $file_db->create_entity('deploy', true);
 
             $pre_commands = $request->get('pre_commands');
@@ -29,8 +29,9 @@ class DeploySettings extends BaseController
             $session->getFlashBag()->add('messages', "Deploy settings saved");
             return $this->app->redirect('deploy_settings');
         }else{
+            $deploy_entity = $file_db->create_entity('deploy', true);
             $messages = $session->getFlashBag()->get('messages');
-            return $this->app->templates->render('deploy_settings.html', ['messages'=>$messages]);
+            return $this->app->templates->render('deploy_settings.html', ['messages'=>$messages, 'deploy_entity' => $deploy_entity]);
         }
     }
 }

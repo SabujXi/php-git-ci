@@ -13,8 +13,6 @@ $app->route('/deploy', 'Deploy', ['name' => 'deploy']);
 $app->route('/reset_n_deploy', 'Deploy', ['name' => 'reset_n_deploy']);
 
 
-
-
 /* closure example
 $app->route('/', function (){
     //return new Response("Home Page", 200, ['Content-Type'=>'text/plain']);

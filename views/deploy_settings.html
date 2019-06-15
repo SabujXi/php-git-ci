@@ -13,22 +13,22 @@
 <form method="post">
     <div class="form-group">
         <label for="pre_commands">Pre Commands</label>
-        <textarea name="pre_commands" class="form-control" id="pre_commands" placeholder="Pre Commands to be executed"></textarea>
+        <textarea name="pre_commands" class="form-control" id="pre_commands" placeholder="Pre Commands to be executed">{{ deploy_entity.get('pre_commands', '') }}</textarea>
     </div>
 
     <div class="form-group">
         <label for="deploy_dir">Deploy Dir</label>
-        <input name="deploy_dir" type="text" class="form-control" id="deploy_dir" placeholder="Deploy Directory (relative to ci or absolute)">
+        <input name="deploy_dir" value="{{ deploy_entity.get('deploy_dir', '') }}" type="text" class="form-control" id="deploy_dir" placeholder="Deploy Directory (relative to ci or absolute)">
     </div>
 
     <div class="form-group">
         <label for="git_repository_url">GIT URL</label>
-        <input name="git_repository_url" type="text" class="form-control" id="git_repository_url" placeholder="Git URL along with CI token.">
+        <input name="git_repository_url" value="{{ deploy_entity.get('git_repository_url', '') }}" type="text" class="form-control" id="git_repository_url" placeholder="Git URL along with CI token.">
     </div>
 
     <div class="form-group">
         <label for="post_commands">Post Commands</label>
-        <textarea name="post_commands" class="form-control" id="post_commands" placeholder="Post Commands to be executed"></textarea>
+        <textarea name="post_commands" class="form-control" id="post_commands" placeholder="Post Commands to be executed">{{ deploy_entity.get('post_commands', '') }}</textarea>
     </div>
 
     <button type="submit" class="btn btn-primary">Save</button>
